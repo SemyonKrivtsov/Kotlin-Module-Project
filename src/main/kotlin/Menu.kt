@@ -3,7 +3,7 @@ import java.util.Scanner
 class Menu <T : Entity>(
     private val title: String,
     private val scanner: Scanner,
-    private val entities: MutableList<T>,
+    private val getEntities: () -> List<T>,
     private val createEntity: (String) -> Unit,
     private val showMenu: (T) -> Unit
 ) {
@@ -12,8 +12,9 @@ class Menu <T : Entity>(
         load()
     }
 
-    private fun readCommand(scanner: Scanner): Int {
+    private fun readCommand(scanner: Scanner): Boolean {
         print("Выберите действие: ")
+        val entities = getEntities()
         val input = scanner.nextLine()
 
         try {
@@ -32,7 +33,7 @@ class Menu <T : Entity>(
                     showMenu(selectedEntity)
                 }
                 entities.size + 1 -> {
-                    return -1
+                    return false
                 }
                 else -> println("Нет такого пункта меню!")
             }
@@ -40,10 +41,11 @@ class Menu <T : Entity>(
             println("Ошибка: введите число!")
         }
 
-        return 0
+        return true
     }
 
     private fun printMenu() {
+        val entities = getEntities()
         println("\nСписок \"${title}\":")
         println("0. Создать")
         entities.forEachIndexed { index, entity ->
@@ -53,12 +55,12 @@ class Menu <T : Entity>(
     }
 
     fun load() {
-        var exitCode: Int
+        var exitCode: Boolean
         do
         {
             printMenu()
             exitCode = readCommand(scanner)
         }
-        while (exitCode != -1)
+        while (exitCode)
     }
 }

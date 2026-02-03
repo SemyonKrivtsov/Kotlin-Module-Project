@@ -2,24 +2,35 @@ import java.util.Scanner
 
 class App {
     private val scanner = Scanner(System.`in`)
-    private val arhivies = mutableListOf<Archive>()
+    private val archives = mutableListOf<Archive>()
+
+    private fun addArchive(title: String) {
+        val newArchive = Archive(title)
+        archives.add(newArchive)
+    }
 
     private fun showNotesMenu(archive: Archive) {
-        Menu<Note>(
+        Menu(
             "Заметки",
             scanner,
-            archive.getNotes(),
+            { archive.getNotes() },
             { noteTitle -> createNote(archive, noteTitle) },
-            { note -> showNoteView(note) })
+            { note -> showNoteView(note) }
+        )
     }
 
     fun start() {
-        Menu<Archive>(
-            "Архивы",
-            scanner,
-            arhivies,
-            { archiveTitle -> arhivies.add(Archive(archiveTitle)) },
-            { archive -> showNotesMenu(archive) })
+        try {
+            Menu(
+                "Архивы",
+                scanner,
+                { archives },
+                { archiveTitle -> addArchive(archiveTitle) },
+                { archive -> showNotesMenu(archive) }
+            )
+        } finally {
+            scanner.close()
+        }
     }
 
     fun showNoteView(note: Note) {
@@ -27,7 +38,6 @@ class App {
         println("=".repeat(50))
         println(note.getContent())
         println("=".repeat(50))
-        return
     }
 
     fun createNote(archive: Archive, name: String) {

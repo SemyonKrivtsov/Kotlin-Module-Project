@@ -4,7 +4,7 @@ data class Note(
     override val title: String,
     private val text: String
 ) : Entity(title) {
-    fun getContent(): String { return text }
+    fun getContent(): String = text
 }
 
 class Archive(override val title: String) : Entity(title) {
@@ -14,7 +14,5 @@ class Archive(override val title: String) : Entity(title) {
         notes.add(note)
     }
 
-    fun getNotes(): MutableList<Note> {
-        return notes
-    }
+    fun getNotes(): List<Note> = notes.toList()
 }
