@@ -5,7 +5,7 @@ class App {
     private val arhivies = mutableListOf<Archive>()
 
     private fun showNotesMenu(archive: Archive) {
-        val menu = Menu<Note>(
+        Menu<Note>(
             "Заметки",
             scanner,
             archive.getNotes(),
@@ -14,7 +14,7 @@ class App {
     }
 
     fun start() {
-        val menu = Menu<Archive>(
+        Menu<Archive>(
             "Архивы",
             scanner,
             arhivies,
