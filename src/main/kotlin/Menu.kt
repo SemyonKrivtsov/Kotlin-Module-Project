@@ -12,6 +12,16 @@ class Menu <T : Entity>(
         load()
     }
 
+    fun load() {
+        var exitCode: Boolean
+        do
+        {
+            printMenu()
+            exitCode = readCommand(scanner)
+        }
+        while (exitCode)
+    }
+
     private fun readCommand(scanner: Scanner): Boolean {
         print("Выберите действие: ")
         val entities = getEntities()
@@ -20,13 +30,7 @@ class Menu <T : Entity>(
         try {
             when (val choice = input.toInt()) {
                 0 -> {
-                    print("Введите название: ")
-                    val name = scanner.nextLine().trim()
-                    if (name.isEmpty()) {
-                        println("Название не может быть пустым!")
-                    } else {
-                        createEntity(name)
-                    }
+                    readName(scanner)
                 }
                 in 1..entities.size -> {
                     val selectedEntity = entities[choice - 1]
@@ -54,13 +58,13 @@ class Menu <T : Entity>(
         println("${entities.size + 1}. Выход")
     }
 
-    fun load() {
-        var exitCode: Boolean
-        do
-        {
-            printMenu()
-            exitCode = readCommand(scanner)
+    private fun readName(scanner: Scanner) {
+        print("Введите название: ")
+        val name = scanner.nextLine().trim()
+        if (name.isEmpty()) {
+            println("Название не может быть пустым!")
+        } else {
+            createEntity(name)
         }
-        while (exitCode)
     }
 }
